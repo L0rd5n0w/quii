@@ -1,8 +1,10 @@
 package blogrender
 
 import (
-	"fmt"
+	"embed"
+	"html/template"
 	"io"
+
 )
 
 type Post struct {
@@ -12,7 +14,28 @@ type Post struct {
 	Tags			[]string
 }
 
-func Render(w io.Writer, p Post) error {
-	_, err := fmt.Fprintf(w, "<h1>%s</h1><p>%s</p> Tags: <ul><li>%s</li><li>%s</li></ul>", p.Title, p.Description, p.Tags[0], p.Tags[1])
-	return err
+var (
+	//go:embed "templates/*"
+	postTemplates embed.FS
+)
+
+type PostRenderer struct {
+	templ *template.Template
+}
+
+func NewPostRenderer() (*PostRenderer, error) {
+	templ, err := template.ParseFS(postTemplates, "templates/*.gohtml")
+	if err != nil {
+		return nil, err
+	}
+
+	return &PostRenderer{templ: templ}, nil
+}
+
+func(r *PostRenderer) Render(w io.Writer, p Post) error {
+	if err := r.templ.ExecuteTemplate(w, "blog.gohtml", p); err != nil {
+		return err
+	}
+
+	return nil
 }
