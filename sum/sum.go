@@ -25,7 +25,3 @@ func SumAllTails(numbers ...[]int) []int {
 	}
 	return sums
 }
-
-/*func SumAllTails(numbers ...[]int) []int {
-	return nil
-}*/
