@@ -10,7 +10,7 @@ import (
 type PlayerStore interface {
 	GetPlayerScore(name string) int
 	RecordWin(name string)
-	GetLeague() []Player
+	GetLeague() League
 }
 
 type PlayerServer struct {
@@ -20,7 +20,7 @@ type PlayerServer struct {
 
 type Player struct {
 	Name 	string
-	Win		int
+	Wins	int
 }
 
 func NewPlayerServer(store PlayerStore) *PlayerServer {
@@ -85,6 +85,6 @@ func(s *StubPlayerStore) RecordWin(name string) {
 	s.winCalls = append(s.winCalls, name)
 }
 
-func(s *StubPlayerStore) GetLeague() []Player {
+func(s *StubPlayerStore) GetLeague() League {
 	return s.league
 }
