@@ -1,4 +1,4 @@
-package main
+package poker
 
 //in_memory_player_store.go
 func NewInMemoryPlayerStore() *InMemoryPlayerStore {
